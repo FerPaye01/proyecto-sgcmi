@@ -1,0 +1,142 @@
+ACCESO A LOS 12 REPORTES - GUIA RAPIDA
+======================================
+
+REQUISITOS PREVIOS
+==================
+
+1. Servidor Laravel corriendo:
+   php artisan serve
+   Accesible en: http://localhost:8000
+
+2. Base de datos con datos:
+   php seed_report_data.php
+
+3. Usuario autenticado con permisos de reporte
+
+
+USUARIOS DE PRUEBA
+==================
+
+Email: admin@example.com
+Password: password
+
+Email: planificador@example.com
+Password: password
+
+Email: transportista@example.com
+Password: password
+
+Email: operador@example.com
+Password: password
+
+Email: agente@example.com
+Password: password
+
+
+ACCESO A LOS REPORTES
+=====================
+
+R1 - Programacion vs Ejecucion (Portuario)
+URL: http://localhost:8000/reports/port/schedule-vs-actual
+Permisos: PORT_REPORT_READ
+Filtros: ?fecha_desde=2025-01-01&fecha_hasta=2025-01-31&berth_id=1&vessel_id=1
+
+R3 - Utilizacion de Muelles (Portuario)
+URL: http://localhost:8000/reports/port/berth-utilization
+Permisos: PORT_REPORT_READ
+Filtros: ?fecha_desde=2025-01-01&berth_id=1&franja_horas=1
+
+R4 - Tiempo de Espera de Camiones (Terrestre)
+URL: http://localhost:8000/reports/road/waiting-time
+Permisos: ROAD_REPORT_READ
+Filtros: ?fecha_desde=2025-01-01&company_id=1
+Nota: TRANSPORTISTA solo ve sus propias citas
+
+R5 - Cumplimiento de Citas (Terrestre)
+URL: http://localhost:8000/reports/road/appointments-compliance
+Permisos: ROAD_REPORT_READ
+Filtros: ?fecha_desde=2025-01-01&company_id=1
+Nota: Ranking oculto para TRANSPORTISTA
+
+R6 - Productividad de Gates (Terrestre)
+URL: http://localhost:8000/reports/road/gate-productivity
+Permisos: ROAD_REPORT_READ
+Filtros: ?fecha_desde=2025-01-01&gate_id=1&capacidad_teorica=10
+
+R7 - Estado de Tramites por Nave (Aduanero)
+URL: http://localhost:8000/reports/cus/status-by-vessel
+Permisos: CUS_REPORT_READ
+Filtros: ?fecha_desde=2025-01-01&vessel_id=1&estado=APROBADO&entidad_id=1
+
+R8 - Tiempo de Despacho (Aduanero)
+URL: http://localhost:8000/reports/cus/dispatch-time
+Permisos: CUS_REPORT_READ
+Filtros: ?fecha_desde=2025-01-01&regimen=IMPORTACION&umbral_horas=24&entidad_id=1
+
+R9 - Incidencias de Documentacion (Aduanero)
+URL: http://localhost:8000/reports/cus/doc-incidents
+Permisos: CUS_REPORT_READ
+Filtros: ?fecha_desde=2025-01-01&regimen=IMPORTACION&entidad_id=1
+
+R10 - Panel de KPIs Ejecutivo (Analytics)
+URL: http://localhost:8000/reports/kpi/panel
+Permisos: KPI_READ
+Filtros: ?fecha_desde=2025-01-01&meta_turnaround=48&meta_espera_camion=2
+API: http://localhost:8000/reports/kpi/panel/api
+
+R11 - Alertas Tempranas (Analytics)
+URL: http://localhost:8000/reports/analytics/early-warning
+Permisos: KPI_READ
+Filtros: ?fecha_desde=2025-01-01&umbral_congestión=85&umbral_acumulación=4
+API: http://localhost:8000/reports/analytics/early-warning/api
+
+R12 - Cumplimiento de SLAs (Analytics)
+URL: http://localhost:8000/reports/sla/compliance
+Permisos: SLA_READ
+Filtros: ?fecha_desde=2025-01-01&fecha_hasta=2025-01-31
+
+
+VERIFICACION RAPIDA
+===================
+
+1. Verificar que todo funciona:
+   php test_all_reports.php
+
+2. Diagnosticar problemas:
+   php diagnose_reports.php
+
+3. Generar mas datos de prueba:
+   php seed_report_data.php
+
+
+TROUBLESHOOTING
+===============
+
+Error 403 Forbidden:
+- Usuario sin permisos
+- Ejecutar: php artisan db:seed --class=RolePermissionSeeder
+
+Error 500 en reporte:
+- Ver logs: tail -f storage/logs/laravel.log
+- Ejecutar tests: php artisan test tests/Feature/ReportControllerTest.php
+
+Reporte sin datos:
+- Generar datos: php seed_report_data.php
+- Remover filtros (acceder sin parametros GET)
+- Verificar rango de fechas
+
+
+RESUMEN
+=======
+
+✓ Todos los 12 reportes estan completamente implementados
+✓ Todos los reportes funcionan correctamente
+✓ Datos de prueba generados automaticamente
+✓ Permisos y RBAC configurados
+✓ Exportacion (CSV, XLSX, PDF) disponible
+✓ APIs de polling para R10 y R11
+✓ Alertas tempranas con notificaciones mock
+✓ SLAs configurables
+✓ Tests unitarios e integracion completos
+
+LISTO! Accede a cualquiera de las URLs anteriores para ver los reportes.

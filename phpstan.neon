@@ -1,0 +1,13 @@
+parameters:
+    level: 5
+    paths:
+        - app
+        - database/factories
+        - database/seeders
+    excludePaths:
+        - app/Console/Kernel.php
+        - app/Exceptions/Handler.php
+    ignoreErrors:
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false

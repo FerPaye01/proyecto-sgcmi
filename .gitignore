@@ -1,0 +1,71 @@
+# Laravel & PHP
+/vendor/
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+!storage/framework/cache/.gitignore
+!storage/framework/sessions/.gitignore
+!storage/framework/testing/.gitignore
+!storage/framework/views/.gitignore
+!storage/logs/.gitignore
+
+# Environment & Secrets
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+
+# IDE & Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Compiled Assets
+/public/build/
+/public/css/
+/public/js/
+/public/mix-manifest.json
+
+# Dependencies
+composer.phar
+composer.lock
+package-lock.json
+yarn.lock
+
+# Testing
+coverage/
+.phpunit.cache
+
+# Build artifacts
+npm-debug.log
+yarn-error.log
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+*.log
+*.cache
+*.tmp
+*.bak
+
+# Zip files (no subir el proyecto comprimido)
+*.zip
+*.tar.gz
+*.rar

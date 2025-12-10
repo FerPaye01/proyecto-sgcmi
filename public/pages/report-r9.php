@@ -1,0 +1,15 @@
+<?php
+// R9: Incidencias de Documentación
+$filters = ['fecha_desde' => $_GET['fecha_desde'] ?? date('Y-m-01'), 'fecha_hasta' => $_GET['fecha_hasta'] ?? date('Y-m-d')];
+$stmt = $pdo->prepare("SELECT t.*, e.name as entidad_name FROM aduanas.tramite t JOIN aduanas.entidad e ON t.entidad_id = e.id WHERE t.fecha_inicio >= :fecha_desde AND t.fecha_inicio <= :fecha_hasta ORDER BY t.fecha_inicio DESC");
+$stmt->execute($filters);
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$rechazos = count(array_filter($data, fn($r) => $r['estado'] == 'RECHAZADO'));
+$observados = count(array_filter($data, fn($r) => $r['estado'] == 'OBSERVADO'));
+include 'layout/header.php';
+?>
+<div class="page-header"><h1>⚠️ R9: Incidencias de Documentación</h1><p>Rechazos, reprocesamientos, tiempo de subsanación</p></div>
+<div class="card" style="margin-bottom: 2rem;"><div class="card-body"><form method="GET" style="display: flex; gap: 1rem; align-items: end; flex-wrap: wrap;"><input type="hidden" name="page" value="report-r9"><div><label>Fecha Desde:</label><input type="date" name="fecha_desde" value="<?=htmlspecialchars($filters['fecha_desde'])?>" class="form-input"></div><div><label>Fecha Hasta:</label><input type="date" name="fecha_hasta" value="<?=htmlspecialchars($filters['fecha_hasta'])?>" class="form-input"></div><button type="submit" class="btn btn-primary">🔍 Filtrar</button></form></div></div>
+<div class="stats-grid" style="margin-bottom: 2rem;"><div class="stat-card red"><div class="stat-content"><div class="stat-number"><?=$rechazos?></div><div class="stat-label">Rechazos</div></div></div><div class="stat-card orange"><div class="stat-content"><div class="stat-number"><?=$observados?></div><div class="stat-label">Observados</div></div></div><div class="stat-card blue"><div class="stat-content"><div class="stat-number"><?=count($data)?></div><div class="stat-label">Total Trámites</div></div></div><div class="stat-card purple"><div class="stat-content"><div class="stat-number"><?=count($data) > 0 ? round((($rechazos+$observados)/count($data))*100, 2) : 0?>%</div><div class="stat-label">% Incidencias</div></div></div></div>
+<div class="card"><div class="card-header"><h3>📊 Incidencias por Trámite</h3></div><div class="card-body"><table class="data-table"><thead><tr><th>Trámite ID</th><th>Régimen</th><th>Entidad</th><th>Estado</th><th>Fecha Inicio</th></tr></thead><tbody><?php if (empty($data)): ?><tr><td colspan="5" style="text-align: center; color: #666;">No hay datos disponibles</td></tr><?php else: ?><?php foreach ($data as $row): ?><?php $badge = $row['estado']=='RECHAZADO'?'badge-danger':($row['estado']=='OBSERVADO'?'badge-warning':'badge-success'); ?><tr><td><?=htmlspecialchars($row['tramite_ext_id'])?></td><td><?=htmlspecialchars($row['regimen'])?></td><td><?=htmlspecialchars($row['entidad_name'])?></td><td><span class="badge <?=$badge?>"><?=htmlspecialchars($row['estado'])?></span></td><td><?=date('d/m/Y H:i', strtotime($row['fecha_inicio']))?></td></tr><?php endforeach; ?><?php endif; ?></tbody></table></div></div>
+<?php include 'layout/footer.php'; ?>

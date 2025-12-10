@@ -1,0 +1,33 @@
+[
+    {
+        "timestamp": "2025-12-02 21:39:31",
+        "destinatarios": [
+            "OPERACIONES_PUERTO",
+            "PLANIFICADOR_PUERTO"
+        ],
+        "alertas": [
+            {
+                "id": "ALERT_CONGESTIÓN_001",
+                "tipo": "CONGESTIÓN_MUELLE",
+                "nivel": "AMARILLO",
+                "descripción": "Congestión detectada en Muelle 10 - Utilización al 92%",
+                "acciones_recomendadas": [
+                    "Revisar programación de naves",
+                    "Considerar redistribución a otros muelles",
+                    "Aumentar recursos de operación"
+                ]
+            },
+            {
+                "id": "ALERT_ACUMULACIÓN_001",
+                "tipo": "ACUMULACIÓN_CAMIONES",
+                "nivel": "ROJO",
+                "descripción": "Acumulación de camiones detectada - Espera promedio 5.5 horas",
+                "acciones_recomendadas": [
+                    "Aumentar capacidad de gates",
+                    "Revisar programación de citas",
+                    "Priorizar camiones en espera"
+                ]
+            }
+        ]
+    }
+]
