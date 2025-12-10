@@ -12,7 +12,7 @@ class DashboardController extends Controller
     /**
      * Mostrar el nuevo dashboard con todos los reportes
      */
-    public function index(): View
+    public function index()
     {
         // Si no está autenticado, redirigir a login
         if (!auth()->check()) {

@@ -338,53 +338,20 @@
         </div>
     @endif
 
-    <!-- Detalle de Llamadas -->
+    <!-- Detalle de Llamadas - Tabla Interactiva -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <h3 class="text-xl font-semibold mb-4">Detalle de Llamadas de Naves</h3>
         
-        @if($data->count() > 0)
-            <div class="overflow-x-auto">
-                <table class="min-w-full">
-                    <thead class="table-header">
-                        <tr>
-                            <th class="px-4 py-2 text-left">Nave</th>
-                            <th class="px-4 py-2 text-left">Viaje</th>
-                            <th class="px-4 py-2 text-left">Muelle</th>
-                            <th class="px-4 py-2 text-left">ATB</th>
-                            <th class="px-4 py-2 text-left">ATD</th>
-                            <th class="px-4 py-2 text-left">Permanencia</th>
-                            <th class="px-4 py-2 text-left">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($data as $vesselCall)
-                            <tr class="table-row">
-                                <td class="px-4 py-2">{{ $vesselCall->vessel->name }}</td>
-                                <td class="px-4 py-2">{{ $vesselCall->viaje_id }}</td>
-                                <td class="px-4 py-2">{{ $vesselCall->berth->name ?? 'N/A' }}</td>
-                                <td class="px-4 py-2">{{ $vesselCall->atb?->format('Y-m-d H:i') ?? 'N/A' }}</td>
-                                <td class="px-4 py-2">{{ $vesselCall->atd?->format('Y-m-d H:i') ?? 'N/A' }}</td>
-                                <td class="px-4 py-2">
-                                    @if($vesselCall->atb && $vesselCall->atd)
-                                        {{ number_format(($vesselCall->atd->timestamp - $vesselCall->atb->timestamp) / 3600, 2) }}h
-                                    @else
-                                        N/A
-                                    @endif
-                                </td>
-                                <td class="px-4 py-2">
-                                    @if($vesselCall->estado_llamada === 'COMPLETADA')
-                                        <span class="badge-success">{{ $vesselCall->estado_llamada }}</span>
-                                    @elseif($vesselCall->estado_llamada === 'EN_CURSO')
-                                        <span class="badge-warning">{{ $vesselCall->estado_llamada }}</span>
-                                    @else
-                                        <span class="badge-info">{{ $vesselCall->estado_llamada }}</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+        @if(isset($tableData) && count($tableData) > 0)
+            <x-interactive-table 
+                :headers="$tableHeaders"
+                :data="$tableData"
+                :searchable="true"
+                :sortable="true"
+                :paginate="true"
+                :perPage="10"
+                :columnToggle="true"
+            />
         @else
             <div class="text-center py-8 text-gray-500">
                 No hay datos disponibles para los filtros seleccionados

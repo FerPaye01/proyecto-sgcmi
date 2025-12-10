@@ -97,12 +97,64 @@ class ReportController extends Controller
             ->orderBy('name')
             ->get();
 
+        // Preparar datos para tabla interactiva
+        $tableData = $report['data']->map(function ($vesselCall) {
+            $permanencia = null;
+            if ($vesselCall->atb && $vesselCall->atd) {
+                $permanencia = number_format(
+                    ($vesselCall->atd->timestamp - $vesselCall->atb->timestamp) / 3600,
+                    2
+                );
+            }
+
+            return [
+                'id' => $vesselCall->id,
+                'nave' => $vesselCall->vessel->name ?? 'N/A',
+                'viaje' => $vesselCall->viaje_id,
+                'muelle' => $vesselCall->berth->name ?? 'N/A',
+                'atb' => $vesselCall->atb?->format('Y-m-d H:i') ?? 'N/A',
+                'atd' => $vesselCall->atd?->format('Y-m-d H:i') ?? 'N/A',
+                'permanencia' => $permanencia,
+                'estado' => $vesselCall->estado_llamada,
+            ];
+        })->toArray();
+
+        $tableHeaders = [
+            ['key' => 'id', 'label' => 'ID', 'sortable' => true],
+            ['key' => 'nave', 'label' => 'Nave', 'sortable' => true],
+            ['key' => 'viaje', 'label' => 'Viaje', 'sortable' => true],
+            ['key' => 'muelle', 'label' => 'Muelle', 'sortable' => true],
+            ['key' => 'atb', 'label' => 'ATB', 'sortable' => true],
+            ['key' => 'atd', 'label' => 'ATD', 'sortable' => true],
+            [
+                'key' => 'permanencia',
+                'label' => 'Permanencia (h)',
+                'sortable' => true,
+                'format' => 'function(val) { return val ? val + "h" : "N/A"; }',
+            ],
+            [
+                'key' => 'estado',
+                'label' => 'Estado',
+                'sortable' => true,
+                'format' => 'function(val) {
+                    const badges = {
+                        "COMPLETADA": "<span class=\"badge-success\">COMPLETADA</span>",
+                        "EN_CURSO": "<span class=\"badge-warning\">EN_CURSO</span>",
+                        "PROGRAMADA": "<span class=\"badge-info\">PROGRAMADA</span>"
+                    };
+                    return badges[val] || "<span class=\"badge-info\">" + val + "</span>";
+                }',
+            ],
+        ];
+
         return view('reports.port.berth-utilization', [
             'data' => $report['data'],
             'kpis' => $report['kpis'],
             'utilizacion_por_franja' => $report['utilizacion_por_franja'],
             'filters' => $filters,
             'berths' => $berths,
+            'tableData' => $tableData,
+            'tableHeaders' => $tableHeaders,
         ]);
     }
 

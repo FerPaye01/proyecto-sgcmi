@@ -41,7 +41,7 @@ composer.phar
 composer.lock
 package-lock.json
 yarn.lock
-
+.gitignore
 # Testing
 coverage/
 .phpunit.cache

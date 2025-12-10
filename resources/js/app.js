@@ -1,6 +1,7 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
 import Chart from 'chart.js/auto';
+import './interactive-table';
 
 // Make Alpine and Chart.js available globally
 window.Alpine = Alpine;

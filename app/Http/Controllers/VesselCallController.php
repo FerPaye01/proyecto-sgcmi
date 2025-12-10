@@ -35,9 +35,21 @@ class VesselCallController extends Controller
             $query->where('berth_id', $request->berth_id);
         }
 
+        if ($request->filled('vessel_id')) {
+            $query->where('vessel_id', $request->vessel_id);
+        }
+
         $vesselCalls = $query->paginate(20);
 
-        return view('portuario.vessel-calls.index', compact('vesselCalls'));
+        // Obtener listas para filtros
+        $berths = \App\Models\Berth::where('active', true)
+            ->orderBy('name')
+            ->get();
+
+        $vessels = \App\Models\Vessel::orderBy('name')
+            ->get();
+
+        return view('portuario.vessel-calls.index', compact('vesselCalls', 'berths', 'vessels'));
     }
 
     public function create()

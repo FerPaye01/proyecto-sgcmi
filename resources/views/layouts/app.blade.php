@@ -11,46 +11,46 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
     <!-- Navigation -->
-    <nav class="bg-sgcmi-blue-900 text-white shadow-lg">
+    <nav class="bg-blue-900 text-white shadow-lg">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-8">
                     <h1 class="text-2xl font-bold">SGCMI</h1>
                     
-                    <div class="hidden md:flex space-x-4">
+                    <div class="flex space-x-4">
                         @auth
                             @can('SCHEDULE_READ')
-                                <a href="/portuario/vessel-calls" class="hover:bg-sgcmi-blue-800 px-3 py-2 rounded transition-colors">
+                                <a href="/portuario/vessel-calls" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
                                     Portuario
                                 </a>
                             @endcan
                             
                             @can('APPOINTMENT_READ')
-                                <a href="/terrestre/appointments" class="hover:bg-sgcmi-blue-800 px-3 py-2 rounded transition-colors">
+                                <a href="/terrestre/appointments" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
                                     Terrestre
                                 </a>
                             @endcan
                             
                             @can('ADUANA_READ')
-                                <a href="/aduanas/tramites" class="hover:bg-sgcmi-blue-800 px-3 py-2 rounded transition-colors">
+                                <a href="/aduanas/tramites" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
                                     Aduanas
                                 </a>
                             @endcan
                             
                             @can('REPORT_READ')
-                                <a href="/reports" class="hover:bg-sgcmi-blue-800 px-3 py-2 rounded transition-colors">
+                                <a href="/" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
                                     Reportes
                                 </a>
                             @endcan
                             
                             @can('KPI_READ')
-                                <a href="/reports/kpi/panel" class="hover:bg-sgcmi-blue-800 px-3 py-2 rounded transition-colors">
+                                <a href="/reports/kpi/panel" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
                                     KPIs
                                 </a>
                             @endcan
                             
                             @can('ADMIN')
-                                <a href="{{ route('admin.settings.thresholds.show') }}" class="hover:bg-sgcmi-blue-800 px-3 py-2 rounded transition-colors">
+                                <a href="{{ route('admin.settings.thresholds.show') }}" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
                                     ⚙️ Configuración
                                 </a>
                             @endcan
@@ -63,12 +63,12 @@
                         <span class="text-sm">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
                         <form action="/logout" method="POST" class="inline">
                             @csrf
-                            <button type="submit" class="hover:bg-sgcmi-blue-800 px-3 py-2 rounded transition-colors text-sm">
+                            <button type="submit" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors text-sm">
                                 Salir
                             </button>
                         </form>
                     @else
-                        <a href="/login" class="hover:bg-sgcmi-blue-800 px-3 py-2 rounded transition-colors">
+                        <a href="/login" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
                             Iniciar Sesión
                         </a>
                     @endauth

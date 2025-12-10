@@ -1,0 +1,66 @@
+=================================================================
+  CÓMO ACCEDER AL SISTEMA LARAVEL BLADE (CON TABLAS INTERACTIVAS)
+=================================================================
+
+PROBLEMA:
+---------
+Estás usando: http://localhost:8000/index.php?page=vessel-calls
+Esto muestra las páginas PHP ANTIGUAS sin tablas interactivas.
+
+SOLUCIÓN:
+---------
+Usa las URLs de Laravel Blade:
+
+1. INICIAR SERVIDOR
+   php artisan serve
+
+2. ACCEDER A:
+   http://localhost:8000/login
+
+3. DESPUÉS DE LOGIN, USA ESTAS URLs:
+
+   DASHBOARD:
+   http://localhost:8000/
+
+   NAVES (CON TABLA INTERACTIVA):
+   http://localhost:8000/portuario/vessel-calls
+
+   CITAS (CON TABLA INTERACTIVA):
+   http://localhost:8000/terrestre/appointments
+
+   TRÁMITES (CON TABLA INTERACTIVA):
+   http://localhost:8000/aduanas/tramites
+
+   REPORTES (TODOS CON TABLAS INTERACTIVAS):
+   http://localhost:8000/reports/port/berth-utilization
+   http://localhost:8000/reports/road/waiting-time
+   http://localhost:8000/reports/cus/status-by-vessel
+   http://localhost:8000/reports/kpi/panel
+
+CARACTERÍSTICAS DE LAS TABLAS INTERACTIVAS:
+--------------------------------------------
+✅ Búsqueda en tiempo real
+✅ Ordenamiento por columnas (click en encabezados)
+✅ Paginación dinámica (5, 10, 25, 50, 100 filas)
+✅ Toggle de columnas (botón ⚙️ Columnas)
+✅ Contador de resultados
+✅ Sin recargas de página
+
+VERIFICAR QUE ESTÁS EN EL SISTEMA CORRECTO:
+--------------------------------------------
+✅ URL debe ser: /portuario/... o /reports/...
+✅ Debe tener barra de búsqueda arriba de la tabla
+✅ Debe tener selector de filas por página
+✅ Debe tener botones de paginación abajo
+
+❌ Si ves: index.php?page=... → Estás en el sistema ANTIGUO
+
+CREDENCIALES DE PRUEBA:
+-----------------------
+Email: admin@sgcmi.gob.pe
+Password: Admin123!
+
+Email: operador@sgcmi.gob.pe
+Password: Operador123!
+
+=================================================================
