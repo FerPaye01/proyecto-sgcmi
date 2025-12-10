@@ -12,63 +12,51 @@
 <body class="bg-gray-100 min-h-screen">
     <!-- Navigation -->
     <nav class="bg-blue-900 text-white shadow-lg">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-8">
-                    <h1 class="text-2xl font-bold">SGCMI</h1>
-                    
-                    <div class="flex space-x-4">
-                        @auth
-                            @can('SCHEDULE_READ')
-                                <a href="/portuario/vessel-calls" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
-                                    Portuario
-                                </a>
-                            @endcan
-                            
-                            @can('APPOINTMENT_READ')
-                                <a href="/terrestre/appointments" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
-                                    Terrestre
-                                </a>
-                            @endcan
-                            
-                            @can('ADUANA_READ')
-                                <a href="/aduanas/tramites" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
-                                    Aduanas
-                                </a>
-                            @endcan
-                            
-                            @can('REPORT_READ')
-                                <a href="/" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
-                                    Reportes
-                                </a>
-                            @endcan
-                            
-                            @can('KPI_READ')
-                                <a href="/reports/kpi/panel" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
-                                    KPIs
-                                </a>
-                            @endcan
-                            
-                            @can('ADMIN')
-                                <a href="{{ route('admin.settings.thresholds.show') }}" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
-                                    ⚙️ Configuración
-                                </a>
-                            @endcan
-                        @endauth
-                    </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="/" class="text-2xl font-bold text-white hover:text-gray-200">SGCMI</a>
                 </div>
                 
-                <div class="flex items-center space-x-4">
+                <!-- Navigation Links - SIEMPRE VISIBLES -->
+                <div class="flex items-center space-x-1">
+                    <a href="/portuario/vessel-calls" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        Portuario
+                    </a>
+                    <a href="/terrestre/appointments" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        Terrestre
+                    </a>
+                    <a href="/aduanas/tramites" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        Aduanas
+                    </a>
+                    <a href="/" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        Reportes
+                    </a>
+                    <a href="/reports/kpi/panel" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        KPIs
+                    </a>
                     @auth
-                        <span class="text-sm">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
+                        @can('USER_ADMIN')
+                            <a href="{{ route('admin.settings.thresholds.show') }}" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                                ⚙️ Config
+                            </a>
+                        @endcan
+                    @endauth
+                </div>
+                
+                <!-- User Menu -->
+                <div class="flex items-center space-x-3">
+                    @auth
+                        <span class="text-white text-sm">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
                         <form action="/logout" method="POST" class="inline">
                             @csrf
-                            <button type="submit" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors text-sm">
+                            <button type="submit" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
                                 Salir
                             </button>
                         </form>
                     @else
-                        <a href="/login" class="hover:bg-blue-800 px-3 py-2 rounded transition-colors">
+                        <a href="/login" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
                             Iniciar Sesión
                         </a>
                     @endauth

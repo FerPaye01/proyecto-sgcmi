@@ -8,9 +8,17 @@
         <h1 class="text-3xl font-bold text-sgcmi-blue-900">Llamadas de Naves</h1>
         
         @can('SCHEDULE_WRITE')
-            <a href="{{ route('vessel-calls.create') }}" class="btn-primary">
-                Nueva Llamada
-            </a>
+            <div class="flex space-x-3">
+                <a href="{{ route('vessel-planning.service-request') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                    📋 Nueva Solicitud de Servicio
+                </a>
+                <a href="{{ route('resource-planning.index') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                    👥 Gestión de Recursos
+                </a>
+                <a href="{{ route('vessel-calls.create') }}" class="btn-primary">
+                    Nueva Llamada
+                </a>
+            </div>
         @endcan
     </div>
     

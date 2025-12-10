@@ -125,7 +125,10 @@ class TramiteController extends Controller
     {
         $this->authorize('update', $tramite);
 
-        return view('aduanas.tramites.edit', compact('tramite'));
+        $vesselCalls = \App\Models\VesselCall::orderBy('eta', 'desc')->get();
+        $entidades = \App\Models\Entidad::orderBy('name')->get();
+
+        return view('aduanas.tramites.edit', compact('tramite', 'vesselCalls', 'entidades'));
     }
 
     /**

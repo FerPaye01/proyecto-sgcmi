@@ -54,6 +54,38 @@ Route::prefix('portuario')->middleware(['auth'])->group(function () {
             'update' => 'vessel-calls.update',
             'destroy' => 'vessel-calls.destroy',
         ]);
+    
+    // Vessel Planning Routes
+    Route::prefix('vessel-planning')->group(function () {
+        Route::get('/service-request', [\App\Http\Controllers\Portuario\VesselPlanningController::class, 'createServiceRequest'])
+            ->name('vessel-planning.service-request');
+        
+        Route::post('/service-request', [\App\Http\Controllers\Portuario\VesselPlanningController::class, 'storeServiceRequest'])
+            ->name('vessel-planning.store-service-request');
+        
+        Route::get('/{vesselCall}', [\App\Http\Controllers\Portuario\VesselPlanningController::class, 'show'])
+            ->name('vessel-planning.show');
+        
+        Route::get('/{vesselCall}/validate-arrival', function (\App\Models\VesselCall $vesselCall) {
+            $vesselCall->load(['vessel', 'berth', 'shipParticulars']);
+            return view('portuario.vessel-planning.validate-arrival', compact('vesselCall'));
+        })->name('vessel-planning.validate-arrival');
+        
+        Route::post('/{vesselCall}/validate-arrival', [\App\Http\Controllers\Portuario\VesselPlanningController::class, 'validateArrival'])
+            ->name('vessel-planning.validate-arrival.post');
+    });
+    
+    // Resource Planning Routes
+    Route::prefix('resource-planning')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Portuario\ResourcePlanningController::class, 'index'])
+            ->name('resource-planning.index');
+        
+        Route::post('/allocate', [\App\Http\Controllers\Portuario\ResourcePlanningController::class, 'allocateResources'])
+            ->name('resource-planning.allocate');
+        
+        Route::patch('/{allocation}', [\App\Http\Controllers\Portuario\ResourcePlanningController::class, 'updateAllocation'])
+            ->name('resource-planning.update');
+    });
 });
 
 // Terrestre Module Routes

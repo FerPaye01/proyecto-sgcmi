@@ -52,4 +52,19 @@ class VesselCall extends Model
     {
         return $this->hasMany(Tramite::class);
     }
+
+    public function shipParticulars()
+    {
+        return $this->hasOne(ShipParticulars::class);
+    }
+
+    public function loadingPlans()
+    {
+        return $this->hasMany(LoadingPlan::class);
+    }
+
+    public function resourceAllocations()
+    {
+        return $this->hasMany(ResourceAllocation::class);
+    }
 }

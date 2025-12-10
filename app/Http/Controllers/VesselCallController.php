@@ -83,6 +83,15 @@ class VesselCallController extends Controller
             ->with('success', 'Llamada de nave creada exitosamente');
     }
 
+    public function show(VesselCall $vesselCall)
+    {
+        $this->authorize('view', $vesselCall);
+        
+        $vesselCall->load(['vessel', 'berth']);
+        
+        return view('portuario.vessel-calls.show', compact('vesselCall'));
+    }
+
     public function edit(VesselCall $vesselCall)
     {
         $this->authorize('update', $vesselCall);
