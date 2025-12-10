@@ -21,6 +21,7 @@ class OperationsMeeting extends Model
         'agreements',
         'next_24h_schedule',
         'created_by',
+        'updated_by',
     ];
 
     protected $casts = [
@@ -32,5 +33,10 @@ class OperationsMeeting extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updater(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

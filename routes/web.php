@@ -86,6 +86,30 @@ Route::prefix('portuario')->middleware(['auth'])->group(function () {
         Route::patch('/{allocation}', [\App\Http\Controllers\Portuario\ResourcePlanningController::class, 'updateAllocation'])
             ->name('resource-planning.update');
     });
+    
+    // Operations Meeting Routes
+    Route::prefix('operations-meeting')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Portuario\OperationsMeetingController::class, 'index'])
+            ->name('operations-meeting.index');
+        
+        Route::get('/create', [\App\Http\Controllers\Portuario\OperationsMeetingController::class, 'create'])
+            ->name('operations-meeting.create');
+        
+        Route::post('/', [\App\Http\Controllers\Portuario\OperationsMeetingController::class, 'store'])
+            ->name('operations-meeting.store');
+        
+        Route::get('/{operationsMeeting}', [\App\Http\Controllers\Portuario\OperationsMeetingController::class, 'show'])
+            ->name('operations-meeting.show');
+        
+        Route::get('/{operationsMeeting}/edit', [\App\Http\Controllers\Portuario\OperationsMeetingController::class, 'edit'])
+            ->name('operations-meeting.edit');
+        
+        Route::patch('/{operationsMeeting}', [\App\Http\Controllers\Portuario\OperationsMeetingController::class, 'update'])
+            ->name('operations-meeting.update');
+        
+        Route::delete('/{operationsMeeting}', [\App\Http\Controllers\Portuario\OperationsMeetingController::class, 'destroy'])
+            ->name('operations-meeting.destroy');
+    });
 });
 
 // Terrestre Module Routes

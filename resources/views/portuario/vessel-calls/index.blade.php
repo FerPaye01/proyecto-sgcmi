@@ -9,6 +9,9 @@
         
         @can('SCHEDULE_WRITE')
             <div class="flex space-x-3">
+                <a href="{{ route('operations-meeting.index') }}" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                    📅 Juntas de Operaciones
+                </a>
                 <a href="{{ route('vessel-planning.service-request') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     📋 Nueva Solicitud de Servicio
                 </a>
