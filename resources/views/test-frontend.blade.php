@@ -22,10 +22,10 @@
         </div>
         
         <div class="mt-4 flex gap-2">
-            <span class="badge-success">Success</span>
-            <span class="badge-warning">Warning</span>
-            <span class="badge-danger">Danger</span>
-            <span class="badge-info">Info</span>
+            <span class="badge-success">Éxito</span>
+            <span class="badge-warning">Advertencia</span>
+            <span class="badge-danger">Peligro</span>
+            <span class="badge-info">Información</span>
         </div>
     </div>
     

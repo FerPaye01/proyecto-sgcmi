@@ -1,0 +1,67 @@
+[
+    {
+        "report_type": "COARRI",
+        "vessel_call_id": 1,
+        "format": "json",
+        "generated_at": "2025-12-11T21:24:48-05:00",
+        "transmitted_at": "2025-12-11T21:24:48-05:00",
+        "endpoints": {
+            "maritime_agency": "https:\/\/mock-api.example.com\/maritime-agency\/reports",
+            "warehouse_system": "https:\/\/mock-api.example.com\/warehouse\/cargo-status"
+        },
+        "status": "MOCK_SUCCESS",
+        "content_preview": "{\n    \"report_type\": \"COARRI\",\n    \"report_id\": \"COARRI-1-20251211212448\",\n    \"generated_at\": \"2025-12-11T21:24:48-05:00\",\n    \"vessel_call\": {\n        \"id\": 1,\n        \"vessel_name\": \"MSC MARINA\",\n ..."
+    },
+    {
+        "report_type": "COARRI",
+        "vessel_call_id": 1,
+        "format": "json",
+        "generated_at": "2025-12-11T21:25:05-05:00",
+        "transmitted_at": "2025-12-11T21:25:05-05:00",
+        "endpoints": {
+            "maritime_agency": "https:\/\/mock-api.example.com\/maritime-agency\/reports",
+            "warehouse_system": "https:\/\/mock-api.example.com\/warehouse\/cargo-status"
+        },
+        "status": "MOCK_SUCCESS",
+        "content_preview": "{\n    \"report_type\": \"COARRI\",\n    \"report_id\": \"COARRI-1-20251211212505\",\n    \"generated_at\": \"2025-12-11T21:25:05-05:00\",\n    \"vessel_call\": {\n        \"id\": 1,\n        \"vessel_name\": \"MSC MARINA\",\n ..."
+    },
+    {
+        "report_type": "CODECO",
+        "vessel_call_id": 1,
+        "format": "xml",
+        "generated_at": "2025-12-11T21:25:05-05:00",
+        "transmitted_at": "2025-12-11T21:25:05-05:00",
+        "endpoints": {
+            "maritime_agency": "https:\/\/mock-api.example.com\/maritime-agency\/reports",
+            "warehouse_system": "https:\/\/mock-api.example.com\/warehouse\/cargo-status"
+        },
+        "status": "MOCK_SUCCESS",
+        "content_preview": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<codeco_report>\n  <report_type>CODECO<\/report_type>\n  <report_id>CODECO-1-20251211212505<\/report_id>\n  <generated_at>2025-12-11T21:25:05-05:00<\/generated_at>\n  <..."
+    },
+    {
+        "report_type": "CODECO",
+        "vessel_call_id": 35,
+        "format": "json",
+        "generated_at": "2025-12-12T03:44:33-05:00",
+        "transmitted_at": "2025-12-12T03:44:33-05:00",
+        "endpoints": {
+            "maritime_agency": "https:\/\/mock-api.example.com\/maritime-agency\/reports",
+            "warehouse_system": "https:\/\/mock-api.example.com\/warehouse\/cargo-status"
+        },
+        "status": "MOCK_SUCCESS",
+        "content_preview": "{\n    \"report_type\": \"CODECO\",\n    \"report_id\": \"CODECO-35-20251212034433\",\n    \"generated_at\": \"2025-12-12T03:44:33-05:00\",\n    \"vessel_call\": {\n        \"id\": 35,\n        \"vessel_name\": \"Test Vessel\"..."
+    },
+    {
+        "report_type": "CODECO",
+        "vessel_call_id": 34,
+        "format": "json",
+        "generated_at": "2025-12-12T03:56:48-05:00",
+        "transmitted_at": "2025-12-12T03:56:48-05:00",
+        "endpoints": {
+            "maritime_agency": "https:\/\/mock-api.example.com\/maritime-agency\/reports",
+            "warehouse_system": "https:\/\/mock-api.example.com\/warehouse\/cargo-status"
+        },
+        "status": "MOCK_SUCCESS",
+        "content_preview": "{\n    \"report_type\": \"CODECO\",\n    \"report_id\": \"CODECO-34-20251212035648\",\n    \"generated_at\": \"2025-12-12T03:56:48-05:00\",\n    \"vessel_call\": {\n        \"id\": 34,\n        \"vessel_name\": \"CMA CGM ANDE..."
+    }
+]

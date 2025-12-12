@@ -67,4 +67,9 @@ class VesselCall extends Model
     {
         return $this->hasMany(ResourceAllocation::class);
     }
+
+    public function cargoManifests()
+    {
+        return $this->hasMany(CargoManifest::class);
+    }
 }

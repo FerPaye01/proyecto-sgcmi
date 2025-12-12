@@ -19,6 +19,11 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             Route::middleware('web')
                 ->group(base_path('routes/auth.php'));
+            
+            // Define rate limiter for exports: 5 per minute per user
+            RateLimiter::for('exports', function (Request $request) {
+                return Limit::perMinute(5)->by($request->user()?->id ?: $request->ip());
+            });
         }
     )
     ->withMiddleware(function (Middleware $middleware) {

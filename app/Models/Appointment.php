@@ -47,4 +47,9 @@ class Appointment extends Model
     {
         return $this->hasMany(GateEvent::class, 'cita_id');
     }
+
+    public function antepuertoQueues()
+    {
+        return $this->hasMany(AntepuertoQueue::class);
+    }
 }

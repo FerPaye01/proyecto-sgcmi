@@ -322,24 +322,90 @@ function dashboard() {
             try {
                 document.getElementById('reportContent').innerHTML = '<p class="text-gray-500 text-center py-8">Cargando reporte...</p>';
                 
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                // Verificar si la respuesta es JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('El servidor no devolvió JSON. Verifica que estés autenticado.');
+                }
+                
                 const data = await response.json();
                 
                 if (data.success && data.html) {
                     document.getElementById('reportContent').innerHTML = data.html;
                 } else if (data.error) {
-                    document.getElementById('reportContent').innerHTML = `<p class="text-red-600">${data.error}</p>`;
+                    document.getElementById('reportContent').innerHTML = `
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <p class="text-red-800 font-semibold">Error:</p>
+                            <p class="text-red-600">${data.error}</p>
+                        </div>
+                    `;
                 } else {
-                    document.getElementById('reportContent').innerHTML = '<p class="text-red-600">Error desconocido al cargar el reporte</p>';
+                    document.getElementById('reportContent').innerHTML = `
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <p class="text-yellow-800">No se pudo cargar el reporte. Intenta nuevamente.</p>
+                        </div>
+                    `;
                 }
             } catch (error) {
-                document.getElementById('reportContent').innerHTML = `<p class="text-red-600">Error: ${error.message}</p>`;
+                console.error('Error loading report:', error);
+                document.getElementById('reportContent').innerHTML = `
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <p class="text-red-800 font-semibold">Error de conexión:</p>
+                        <p class="text-red-600">${error.message}</p>
+                        <p class="text-sm text-red-500 mt-2">Por favor, verifica tu conexión e intenta nuevamente.</p>
+                    </div>
+                `;
             }
         },
         
         exportReport(format) {
-            alert(`Exportando ${this.selectedReport} en formato ${format.toUpperCase()}`);
-            // Implementar exportación
+            // Crear un formulario para enviar la petición POST
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/export/${this.selectedReportCode}`;
+            form.target = '_blank'; // Abrir en nueva pestaña
+            
+            // Agregar token CSRF
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            if (csrfToken) {
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = csrfToken;
+                form.appendChild(csrfInput);
+            }
+            
+            // Agregar formato
+            const formatInput = document.createElement('input');
+            formatInput.type = 'hidden';
+            formatInput.name = 'format';
+            formatInput.value = format;
+            form.appendChild(formatInput);
+            
+            // Agregar filtros
+            const fechaDesdeInput = document.createElement('input');
+            fechaDesdeInput.type = 'hidden';
+            fechaDesdeInput.name = 'fecha_desde';
+            fechaDesdeInput.value = this.filters.fecha_desde;
+            form.appendChild(fechaDesdeInput);
+            
+            const fechaHastaInput = document.createElement('input');
+            fechaHastaInput.type = 'hidden';
+            fechaHastaInput.name = 'fecha_hasta';
+            fechaHastaInput.value = this.filters.fecha_hasta;
+            form.appendChild(fechaHastaInput);
+            
+            // Agregar al DOM, enviar y eliminar
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
         }
     }
 }

@@ -26,7 +26,7 @@
                     type="text" 
                     x-model="searchQuery"
                     @input.debounce.300ms="search()"
-                    placeholder="Buscar en la tabla..."
+                    placeholder="Buscar..."
                     class="input-field w-full"
                 >
             </div>

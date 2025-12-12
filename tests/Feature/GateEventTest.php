@@ -205,4 +205,153 @@ class GateEventTest extends TestCase
         $this->assertStringContainsString('***MASKED***', json_encode($auditLog->details));
         $this->assertStringNotContainsString('ABC-123', json_encode($auditLog->details));
     }
+
+    public function test_gate_event_validates_exit_permit_for_salida(): void
+    {
+        $role = Role::where('code', 'OPERADOR_GATES')->first();
+        $user = User::factory()->create();
+        $user->roles()->attach($role);
+
+        $gate = Gate::factory()->create();
+        $truck = Truck::factory()->create();
+
+        // Create digital pass but no exit permit
+        \App\Models\DigitalPass::factory()->create([
+            'truck_id' => $truck->id,
+            'status' => 'ACTIVO',
+        ]);
+
+        $data = [
+            'gate_id' => $gate->id,
+            'truck_id' => $truck->id,
+            'action' => 'SALIDA',
+            'event_ts' => now()->toDateTimeString(),
+        ];
+
+        $response = $this->actingAs($user)->post('/terrestre/gate-events', $data);
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors(['validation']);
+    }
+
+    public function test_gate_event_allows_salida_with_valid_exit_permit(): void
+    {
+        $role = Role::where('code', 'OPERADOR_GATES')->first();
+        $user = User::factory()->create();
+        $user->roles()->attach($role);
+
+        $gate = Gate::factory()->create();
+        $truck = Truck::factory()->create();
+
+        // Create digital pass with exit permit
+        $digitalPass = \App\Models\DigitalPass::factory()->create([
+            'truck_id' => $truck->id,
+            'status' => 'ACTIVO',
+        ]);
+
+        \App\Models\AccessPermit::factory()->create([
+            'digital_pass_id' => $digitalPass->id,
+            'permit_type' => 'SALIDA',
+            'status' => 'PENDIENTE',
+            'authorized_by' => $user->id,
+        ]);
+
+        $data = [
+            'gate_id' => $gate->id,
+            'truck_id' => $truck->id,
+            'action' => 'SALIDA',
+            'event_ts' => now()->toDateTimeString(),
+        ];
+
+        $response = $this->actingAs($user)->post('/terrestre/gate-events', $data);
+
+        $response->assertRedirect(route('gate-events.index'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('terrestre.gate_event', [
+            'gate_id' => $gate->id,
+            'truck_id' => $truck->id,
+            'action' => 'SALIDA',
+        ]);
+
+        // Verify permit was marked as used
+        $this->assertDatabaseHas('terrestre.access_permit', [
+            'digital_pass_id' => $digitalPass->id,
+            'permit_type' => 'SALIDA',
+            'status' => 'USADO',
+        ]);
+    }
+
+    public function test_gate_event_validates_entry_permit_for_entrada(): void
+    {
+        $role = Role::where('code', 'OPERADOR_GATES')->first();
+        $user = User::factory()->create();
+        $user->roles()->attach($role);
+
+        $gate = Gate::factory()->create();
+        $truck = Truck::factory()->create();
+
+        // Create digital pass but no entry permit
+        \App\Models\DigitalPass::factory()->create([
+            'truck_id' => $truck->id,
+            'status' => 'ACTIVO',
+        ]);
+
+        $data = [
+            'gate_id' => $gate->id,
+            'truck_id' => $truck->id,
+            'action' => 'ENTRADA',
+            'event_ts' => now()->toDateTimeString(),
+        ];
+
+        $response = $this->actingAs($user)->post('/terrestre/gate-events', $data);
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors(['validation']);
+    }
+
+    public function test_gate_event_validates_booking_note_for_cargo_exit(): void
+    {
+        $role = Role::where('code', 'OPERADOR_GATES')->first();
+        $user = User::factory()->create();
+        $user->roles()->attach($role);
+
+        $gate = Gate::factory()->create();
+        $truck = Truck::factory()->create();
+
+        // Create digital pass with exit permit
+        $digitalPass = \App\Models\DigitalPass::factory()->create([
+            'truck_id' => $truck->id,
+            'status' => 'ACTIVO',
+        ]);
+
+        // Create cargo item without booking note
+        $cargoItem = \App\Models\CargoItem::factory()->create([
+            'bl_number' => null, // Missing booking note
+            'status' => 'ALMACENADO',
+        ]);
+
+        \App\Models\AccessPermit::factory()->create([
+            'digital_pass_id' => $digitalPass->id,
+            'permit_type' => 'SALIDA',
+            'status' => 'PENDIENTE',
+            'cargo_item_id' => $cargoItem->id,
+            'authorized_by' => $user->id,
+        ]);
+
+        $data = [
+            'gate_id' => $gate->id,
+            'truck_id' => $truck->id,
+            'action' => 'SALIDA',
+            'event_ts' => now()->toDateTimeString(),
+            'extra' => [
+                'cargo_item_id' => $cargoItem->id,
+            ],
+        ];
+
+        $response = $this->actingAs($user)->post('/terrestre/gate-events', $data);
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors(['validation']);
+    }
 }

@@ -21,12 +21,52 @@
                 
                 <!-- Navigation Links - SIEMPRE VISIBLES -->
                 <div class="flex items-center space-x-1">
-                    <a href="/portuario/vessel-calls" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                        Portuario
-                    </a>
-                    <a href="/terrestre/appointments" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                        Terrestre
-                    </a>
+                    <!-- Menú Portuario con dropdown -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1">
+                            Portuario
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" @click.away="open = false" x-transition class="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg z-50">
+                            <a href="/portuario/vessel-calls" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">🚢 Llamadas de Naves</a>
+                            <div class="border-t border-gray-200"></div>
+                            <a href="{{ route('cargo.manifest.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">📦 Manifiestos de Carga</a>
+                            <a href="{{ route('cargo.manifest.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 pl-8">+ Nuevo Manifiesto</a>
+                            <div class="border-t border-gray-200"></div>
+                            <a href="{{ route('yard.map') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">🗺️ Mapa del Patio</a>
+                            <a href="{{ route('yard.locations') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">📍 Ubicaciones</a>
+                            <a href="{{ route('yard.movement-register') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">🚛 Registrar Movimiento</a>
+                            <div class="border-t border-gray-200"></div>
+                            <a href="{{ route('tarja.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">📋 Tarja</a>
+                            <a href="{{ route('weighing.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">⚖️ Pesaje</a>
+                            <div class="border-t border-gray-200"></div>
+                            <a href="{{ route('cargo.generate-reports') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 bg-green-50 font-semibold">🆕 📊 Reportes COARRI/CODECO</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Menú Terrestre con dropdown -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1">
+                            Terrestre
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" @click.away="open = false" x-transition class="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg z-50">
+                            <a href="/terrestre/appointments" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">📅 Citas</a>
+                            <a href="/terrestre/gate-events" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">🚪 Eventos de Gate</a>
+                            <div class="border-t border-gray-200"></div>
+                            <a href="{{ route('digital-pass.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">📱 Pases Digitales</a>
+                            <a href="{{ route('digital-pass.validate-form') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 pl-8">🔍 Validar Pase</a>
+                            <div class="border-t border-gray-200"></div>
+                            <a href="{{ route('access-permit.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 bg-green-50 font-semibold">🆕 🔐 Permisos de Acceso</a>
+                            <div class="border-t border-gray-200"></div>
+                            <a href="{{ route('antepuerto.queue') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 bg-green-50 font-semibold">🆕 🚛 Cola Antepuerto</a>
+                            <a href="{{ route('zoe.status') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 bg-green-50 font-semibold">🆕 📊 Estado ZOE</a>
+                        </div>
+                    </div>
                     <a href="/aduanas/tramites" class="text-white hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium transition-colors">
                         Aduanas
                     </a>

@@ -1,0 +1,154 @@
+================================================================================
+  CÓMO PROBAR LA TAREA 10: CONTROL DE ACCESO MEJORADO
+  Sprint 3 - Sistema de Gestión y Coordinación Multimodal Integrado (SGCMI)
+================================================================================
+
+PASO 1: INICIAR EL SERVIDOR
+----------------------------
+Ejecuta el archivo: INICIAR_SERVIDOR.bat
+(O ejecuta manualmente: php -S localhost:8000 -t public router.php)
+
+
+PASO 2: ABRIR LA DEMOSTRACIÓN
+------------------------------
+Opción A (Recomendada):
+  - Ejecuta el archivo: VER_DEMO_CONTROL_ACCESO.bat
+  
+Opción B (Manual):
+  - Abre tu navegador
+  - Ve a: http://localhost:8000/demo-access-control
+
+
+PASO 3: EXPLORAR LAS NUEVAS FUNCIONALIDADES
+--------------------------------------------
+
+La página de demostración muestra 3 secciones principales:
+
+1. 🎫 PASES DIGITALES CON QR (NUEVO)
+   - Tabla con todos los pases digitales generados
+   - Códigos QR únicos para cada pase
+   - Estados: ACTIVO, VENCIDO, REVOCADO
+   - Tipos: PERSONAL, VEHICULAR
+   - Haz clic en "Ver QR" para visualizar el código QR completo
+
+2. 🔐 PERMISOS DE ACCESO VINCULADOS A CARGA (NUEVO)
+   - Permisos asociados a pases digitales
+   - Vinculación con contenedores específicos
+   - Tipos: SALIDA, INGRESO
+   - Estados: PENDIENTE, USADO, VENCIDO
+   - Trazabilidad de autorización y uso
+
+3. 🚛 GESTIÓN DE COLA DE ANTEPUERTO Y ZOE (NUEVO)
+   - Control de flujo vehicular
+   - Zonas: ANTEPUERTO, ZOE
+   - Cálculo automático de tiempos de espera
+   - Estados: EN_ESPERA, AUTORIZADO, RECHAZADO
+   - Estadísticas en tiempo real
+
+
+QUÉ ES NUEVO VS. LO ANTERIOR
+-----------------------------
+
+ANTES (Tareas 1-9):
+  ✓ Sistema básico de citas (Appointment)
+  ✓ Registro de eventos de gate (GateEvent)
+  ✓ Gestión básica de camiones (Truck)
+  ✗ Sin pases digitales con QR
+  ✗ Sin gestión de antepuerto/ZOE
+  ✗ Sin permisos vinculados a carga
+
+AHORA (Tarea 10):
+  ✓ Pases Digitales con QR (DigitalPass)
+  ✓ Permisos de Acceso (AccessPermit)
+  ✓ Cola de Antepuerto/ZOE (AntepuertoQueue)
+  ✓ Vinculación con carga (CargoItem)
+  ✓ Validación de permisos múltiples
+  ✓ Gestión de tiempos de espera
+
+
+TABLAS DE BASE DE DATOS CREADAS
+--------------------------------
+1. terrestre.digital_pass
+   - Almacena pases digitales con códigos QR
+   - Campos: pass_code, qr_code, pass_type, holder_name, etc.
+
+2. terrestre.access_permit
+   - Almacena permisos de acceso vinculados a carga
+   - Campos: digital_pass_id, permit_type, cargo_item_id, etc.
+
+3. terrestre.antepuerto_queue
+   - Gestiona la cola de vehículos en antepuerto/ZOE
+   - Campos: truck_id, zone, entry_time, exit_time, status, etc.
+
+
+MODELOS ELOQUENT CREADOS
+-------------------------
+1. App\Models\DigitalPass
+   - Generación automática de QR codes
+   - Métodos: isValid(), revoke()
+   - Scopes: active(), valid(), expired()
+
+2. App\Models\AccessPermit
+   - Gestión de permisos de acceso
+   - Métodos: isValid(), markAsUsed(), markAsExpired()
+   - Scopes: pending(), used(), expired()
+
+3. App\Models\AntepuertoQueue
+   - Control de cola de vehículos
+   - Métodos: getWaitingTimeMinutes(), authorize(), reject()
+   - Scopes: inQueue(), authorized(), rejected()
+
+
+FACTORIES CREADOS
+-----------------
+1. DigitalPassFactory
+   - Estados: active(), expired(), revoked()
+   - Tipos: personal(), vehicular()
+
+2. AccessPermitFactory
+   - Estados: pending(), used(), expired()
+   - Tipos: exit(), entry()
+
+3. AntepuertoQueueFactory
+   - Estados: inQueue(), authorized(), rejected()
+   - Zonas: antepuerto(), zoe()
+
+
+DATOS DE DEMOSTRACIÓN
+----------------------
+La primera vez que accedas a la página, se generarán automáticamente:
+- 5 pases digitales con diferentes estados
+- 10 permisos de acceso
+- 10 registros de cola de antepuerto/ZOE
+
+Los datos se generan solo una vez y persisten en la base de datos.
+
+
+CARACTERÍSTICAS INTERACTIVAS
+-----------------------------
+- Visualización de códigos QR en modal
+- Estadísticas en tiempo real
+- Tablas con datos dinámicos
+- Indicadores visuales de estado con colores
+- Cálculo automático de tiempos de espera
+
+
+PRÓXIMOS PASOS (Tareas 11-14)
+------------------------------
+- Tarea 11: Implementar sistema de pases digitales (UI completa)
+- Tarea 12: Implementar gestión de antepuerto y ZOE (UI completa)
+- Tarea 13: Integración OCR/LPR (mock)
+- Tarea 14: Validación de permisos de acceso
+
+
+SOPORTE
+-------
+Si encuentras algún problema:
+1. Verifica que el servidor esté corriendo
+2. Revisa que las migraciones se hayan ejecutado correctamente
+3. Verifica la consola del navegador para errores JavaScript
+
+
+================================================================================
+  Desarrollado como parte del Sprint 3 - Operador Portuario/Terminal
+================================================================================

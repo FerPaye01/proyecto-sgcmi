@@ -1,0 +1,357 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║     GUÍA DE PRUEBAS MANUALES - OPERADOR DE GATES                         ║
+║     Actor: Operador Portuario/Terminal (TISUR/STI)                       ║
+║     Rol: Operador de Gates                                               ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  CONTEXTO DEL ACTOR                                                       │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   Eres un OPERADOR DE GATES del Terminal Portuario de Matarani.
+   
+   Tu trabajo es:
+   • Coordinar la llegada de vehículos terrestres
+   • Optimizar flujos de tráfico
+   • Minimizar congestión en vías de acceso
+   • Validar permisos y documentación
+   • Gestionar el antepuerto y ZOE
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  PASO 1: INICIAR SESIÓN                                                  │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   1. Ejecuta: INICIAR_SERVIDOR.bat
+   2. Abre: http://localhost:8000
+   3. Inicia sesión con credenciales de Operador de Gates
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  ESCENARIO 1: GESTIÓN DE CITAS (Requirement 3.1)                         │
+│  "Pre-notificar entrega o recogida de contenedores"                      │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   Como Operador de Gates, necesitas coordinar la frecuencia de llegada
+   de camiones para evitar congestión.
+
+   PASOS:
+   ──────
+   1. Ve a: Menú → Terrestre → Citas
+      URL: /terrestre/appointments
+
+   2. Revisa las citas programadas para hoy
+      • Verifica horarios
+      • Identifica picos de tráfico
+      • Observa empresas transportistas
+
+   3. Crea una nueva cita:
+      • Clic en "Nueva Cita"
+      • Selecciona camión (placa)
+      • Selecciona empresa transportista
+      • Define hora programada
+      • Asocia con llamada de nave (si aplica)
+      • Guarda
+
+   VALIDAR:
+   ────────
+   ✓ La cita aparece en la lista
+   ✓ El horario no se solapa con otras citas del mismo camión
+   ✓ El sistema muestra el estado "PROGRAMADA"
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  ESCENARIO 2: GENERACIÓN DE PASES DIGITALES (Requirement 3.4)            │
+│  "Generar pases de acceso digitalizados con QR"                          │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   Como Operador de Gates, debes generar pases digitales para personal
+   y trabajadores portuarios que necesitan acceso al terminal.
+
+   PASOS:
+   ──────
+   1. Ve a: Menú → Terrestre → Pases Digitales → Generar Pase
+      URL: /terrestre/digital-pass/generate
+
+   2. Genera un pase PERSONAL:
+      • Tipo: PERSONAL
+      • Nombre: Juan Pérez García
+      • DNI: 12345678
+      • Fecha inicio: Hoy
+      • Fecha fin: +30 días
+      • Clic en "Generar Pase"
+
+   3. Observa el código QR generado automáticamente
+      • Código único (ej: DP-ABC123XYZ)
+      • QR visible en pantalla
+      • Estado: ACTIVO
+
+   4. Genera un pase VEHICULAR:
+      • Tipo: VEHICULAR
+      • Nombre: Carlos Rodríguez
+      • DNI: 87654321
+      • Selecciona camión (placa)
+      • Fecha inicio: Hoy
+      • Fecha fin: +7 días
+      • Clic en "Generar Pase"
+
+   5. Ve a la lista de pases:
+      URL: /terrestre/digital-pass
+
+   6. Haz clic en "Ver Detalle" de un pase
+      • Visualiza el código QR completo
+      • Verifica información del titular
+      • Observa fechas de vigencia
+
+   VALIDAR:
+   ────────
+   ✓ Cada pase tiene un código único
+   ✓ El QR se genera automáticamente
+   ✓ Los pases VEHICULAR están asociados a un camión
+   ✓ Los pases PERSONAL no tienen camión asociado
+   ✓ El estado es ACTIVO para pases vigentes
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  ESCENARIO 3: VALIDACIÓN DE PASES QR (Requirement 3.4)                   │
+│  "Validar pases de acceso en el gate"                                    │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   Como Operador de Gates, cuando un vehículo o persona llega al gate,
+   debes validar su pase digital escaneando el código QR.
+
+   PASOS:
+   ──────
+   1. Ve a: Menú → Terrestre → Pases Digitales → Validar Pase
+      URL: /terrestre/digital-pass/validate
+
+   2. Copia un código de pase de la lista (ej: DP-ABC123XYZ)
+
+   3. Pégalo en el campo "Código de Pase"
+
+   4. Haz clic en "Validar"
+
+   5. Observa el resultado:
+      • Si es VÁLIDO: Fondo verde, información del titular
+      • Si es INVÁLIDO: Fondo rojo, razón del rechazo
+
+   VALIDAR:
+   ────────
+   ✓ Pases ACTIVOS dentro de vigencia → VÁLIDO
+   ✓ Pases VENCIDOS → INVÁLIDO (muestra fecha de vencimiento)
+   ✓ Pases REVOCADOS → INVÁLIDO (muestra "revocado")
+   ✓ Códigos inexistentes → INVÁLIDO (muestra "no encontrado")
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  ESCENARIO 4: GESTIÓN DE ANTEPUERTO (Requirement 3.3)                    │
+│  "Gestionar el uso del Antepuerto y ZOE"                                 │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   Como Operador de Gates, debes regular el ingreso de camiones al terminal
+   usando el Antepuerto y la Zona Operativa de Espera (ZOE).
+
+   PASOS:
+   ──────
+   1. Ve a: Menú → Terrestre → Antepuerto → Cola en Tiempo Real
+      URL: /terrestre/antepuerto/queue
+
+   2. Observa la cola actual:
+      • Camiones en ANTEPUERTO (esperando autorización)
+      • Camiones en ZOE (zona de espera operativa)
+      • Tiempo de espera de cada camión
+      • Estado: EN_ESPERA, AUTORIZADO, RECHAZADO
+
+   3. Revisa las estadísticas:
+      • Total en espera
+      • Tiempo promedio de espera
+      • Distribución por zona
+
+   4. Ve a: Menú → Terrestre → Antepuerto → Autorizar Ingreso
+      URL: /terrestre/antepuerto/authorize
+
+   5. Selecciona un camión de la lista
+
+   6. Decide:
+      • AUTORIZAR: Permite ingreso al terminal
+      • RECHAZAR: Niega el ingreso (requiere motivo)
+
+   7. Ve a: Menú → Terrestre → ZOE → Estado
+      URL: /terrestre/zoe/status
+
+   8. Observa:
+      • Ocupación actual de ZOE
+      • Capacidad disponible
+      • Camiones en espera
+
+   VALIDAR:
+   ────────
+   ✓ Los tiempos de espera se calculan automáticamente
+   ✓ Al autorizar, el camión sale de la cola
+   ✓ Al rechazar, se registra el motivo
+   ✓ Las estadísticas se actualizan en tiempo real
+   ✓ La ocupación de ZOE se refleja correctamente
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  ESCENARIO 5: REGISTRO DE EVENTOS DE GATE (Requirement 3.5)              │
+│  "Capturar eventos de ingreso/salida con OCR/LPR"                        │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   Como Operador de Gates, registras cada evento de ingreso/salida
+   de vehículos. El sistema usa OCR/LPR para lectura automática.
+
+   PASOS:
+   ──────
+   1. Ve a: Menú → Terrestre → Eventos de Gate
+      URL: /terrestre/gate-events
+
+   2. Haz clic en "Registrar Evento"
+
+   3. Selecciona:
+      • Gate (puerta de acceso)
+      • Acción: INGRESO o SALIDA
+
+   4. Observa la simulación de OCR/LPR:
+      • El sistema "lee" automáticamente la placa
+      • Auto-completa datos del camión
+      • Detecta contenedor (si aplica)
+      • Muestra nivel de confianza
+
+   5. Verifica los datos auto-completados:
+      • Placa del camión
+      • Empresa transportista
+      • Cita asociada (si existe)
+
+   6. Guarda el evento
+
+   7. Observa en la lista:
+      • Timestamp del evento
+      • Acción realizada
+      • Datos del vehículo
+
+   VALIDAR:
+   ────────
+   ✓ OCR/LPR auto-completa la placa
+   ✓ El sistema encuentra el camión en la BD
+   ✓ Se asocia automáticamente con la cita
+   ✓ El timestamp es correcto
+   ✓ Los eventos aparecen en orden cronológico
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  ESCENARIO 6: VALIDACIÓN DE PERMISOS (Requirement 3.6)                   │
+│  "Verificar permisos antes de permitir acceso"                           │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   Como Operador de Gates, antes de permitir el acceso de un camión,
+   debes verificar que tenga todos los permisos requeridos.
+
+   PASOS:
+   ──────
+   1. Ve a: Menú → Terrestre → Permisos de Acceso
+      URL: /terrestre/access-permit
+
+   2. Observa los permisos existentes:
+      • PENDIENTE: Autorizados pero no usados
+      • USADO: Ya utilizados
+      • VENCIDO: Expirados
+
+   3. Crea un nuevo permiso:
+      • Clic en "Crear Permiso"
+      • Selecciona un pase digital
+      • Tipo: SALIDA (para recoger contenedor)
+      • Selecciona contenedor (cargo item)
+      • Autoriza el permiso
+
+   4. Simula llegada de camión al gate:
+      • Ve a Eventos de Gate
+      • Registra SALIDA del camión
+      • El sistema valida automáticamente:
+        ✓ Pase digital válido
+        ✓ Permiso de salida autorizado
+        ✓ Contenedor correcto
+
+   5. Observa las alertas:
+      • Si falta algún permiso → Alerta ROJA
+      • Si todo está OK → Confirmación VERDE
+
+   VALIDAR:
+   ────────
+   ✓ No se puede salir sin Permiso de Salida
+   ✓ No se puede salir sin Nota de Embarque (vinculada al contenedor)
+   ✓ No se puede ingresar sin Autorización de Ingreso
+   ✓ El sistema muestra claramente qué permisos faltan
+   ✓ Los permisos usados cambian a estado USADO
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  FLUJO COMPLETO: DÍA EN LA VIDA DEL OPERADOR DE GATES                    │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   MAÑANA (8:00 AM):
+   ──────────────────
+   1. Revisa citas programadas para el día
+   2. Verifica cola de antepuerto
+   3. Autoriza ingreso de primeros camiones
+
+   DURANTE EL DÍA:
+   ───────────────
+   4. Genera pases digitales para trabajadores nuevos
+   5. Valida pases QR en cada ingreso
+   6. Registra eventos de gate (ingreso/salida)
+   7. Gestiona flujo en antepuerto y ZOE
+   8. Valida permisos antes de permitir salidas
+
+   TARDE (6:00 PM):
+   ────────────────
+   9. Revisa estadísticas del día:
+      • Total de eventos registrados
+      • Tiempo promedio de espera
+      • Permisos procesados
+   10. Identifica cuellos de botella
+   11. Planifica mejoras para mañana
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  MÉTRICAS A OBSERVAR                                                      │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   Como Operador de Gates, estas métricas te ayudan a optimizar:
+
+   ✓ Tiempo promedio de espera en antepuerto
+   ✓ Número de camiones autorizados vs rechazados
+   ✓ Tasa de uso de pases digitales
+   ✓ Efectividad del OCR/LPR (% de lecturas correctas)
+   ✓ Permisos validados correctamente
+   ✓ Eventos de gate registrados por hora
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  CASOS DE ERROR A PROBAR                                                 │
+└────────────────────────────────────────────────────────────────────────────┘
+
+   1. Intentar validar un pase vencido
+      → Debe mostrar error y fecha de vencimiento
+
+   2. Intentar registrar salida sin permiso
+      → Debe mostrar alerta de permisos faltantes
+
+   3. Intentar autorizar camión sin cita
+      → Debe permitir pero marcar como "sin cita"
+
+   4. Intentar generar pase con fechas inválidas
+      → Debe validar que fecha_fin > fecha_inicio
+
+   5. Intentar usar un pase revocado
+      → Debe rechazar y mostrar "REVOCADO"
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║  ✅ Sigue estos escenarios para probar todas las funcionalidades         ║
+║     implementadas desde la perspectiva del Operador de Gates             ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝

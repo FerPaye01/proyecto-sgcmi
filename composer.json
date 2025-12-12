@@ -6,14 +6,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "^3.0",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "league/csv": "^9.0",
         "phpoffice/phpspreadsheet": "^2.0",
-        "barryvdh/laravel-dompdf": "^3.0"
+        "simplesoftwareio/simple-qrcode": "*"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.23",
+        "fakerphp/faker": "*",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",

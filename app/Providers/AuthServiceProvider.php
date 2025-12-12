@@ -18,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\VesselCall::class => \App\Policies\VesselCallPolicy::class,
         \App\Models\Tramite::class => \App\Policies\TramitePolicy::class,
         \App\Models\OperationsMeeting::class => \App\Policies\OperationsMeetingPolicy::class,
+        \App\Models\AccessPermit::class => \App\Policies\AccessPermitPolicy::class,
     ];
 
     /**

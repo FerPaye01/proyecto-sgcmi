@@ -27,53 +27,92 @@ class DashboardController extends Controller
      */
     public function getReport(Request $request, string $reportCode)
     {
-        $filters = $request->query();
-        $user = auth()->user();
-
-        // Mapeo de códigos de reporte a métodos del controlador de reportes
-        $reportMethods = [
-            'r1' => 'r1',
-            'r3' => 'r3',
-            'r4' => 'r4',
-            'r5' => 'r5',
-            'r6' => 'r6',
-            'r7' => 'r7',
-            'r8' => 'r8',
-            'r9' => 'r9',
-            'r10' => 'r10',
-            'r11' => 'r11',
-            'r12' => 'r12',
-        ];
-
-        if (!isset($reportMethods[$reportCode])) {
-            return response()->json(['error' => 'Reporte no encontrado'], 404);
-        }
-
         try {
-            $reportController = new \App\Http\Controllers\ReportController();
-            $method = $reportMethods[$reportCode];
+            $filters = $request->query();
+            $user = auth()->user();
 
-            // Crear un request con los filtros
-            $request = Request::create(
-                route("reports.{$reportCode}"),
+            // Validar que el usuario esté autenticado
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Usuario no autenticado',
+                ], 401);
+            }
+
+            // Mapeo de códigos de reporte a rutas
+            $reportRoutes = [
+                'r1' => 'reports.r1',
+                'r3' => 'reports.r3',
+                'r4' => 'reports.r4',
+                'r5' => 'reports.r5',
+                'r6' => 'reports.r6',
+                'r7' => 'reports.r7',
+                'r8' => 'reports.r8',
+                'r9' => 'reports.r9',
+                'r10' => 'reports.r10',
+                'r11' => 'reports.r11',
+                'r12' => 'reports.r12',
+            ];
+
+            if (!isset($reportRoutes[$reportCode])) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Reporte no encontrado',
+                ], 404);
+            }
+
+            // Crear una instancia del ReportController con las dependencias necesarias
+            $reportService = app(\App\Services\ReportService::class);
+            $reportController = new \App\Http\Controllers\ReportController($reportService);
+
+            // Crear un nuevo request con los filtros y el usuario autenticado
+            $newRequest = Request::create(
+                route($reportRoutes[$reportCode]),
                 'GET',
                 $filters
             );
+            
+            // Establecer el usuario en el request
+            $newRequest->setUserResolver(function () use ($user) {
+                return $user;
+            });
 
-            // Llamar al método del controlador
-            $response = $reportController->$method($request);
+            // Llamar al método correspondiente
+            $method = $reportCode;
+            $response = $reportController->$method($newRequest);
 
             // Si es una vista, renderizarla
             if ($response instanceof View) {
+                $html = $response->render();
                 return response()->json([
-                    'html' => $response->render(),
                     'success' => true,
+                    'html' => $html,
                 ]);
             }
 
+            // Si es una respuesta JSON, devolverla directamente
             return $response;
-        } catch (\Exception $e) {
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            \Log::error('Database error in getReport: ' . $e->getMessage(), [
+                'report_code' => $reportCode,
+                'filters' => $request->query(),
+            ]);
+            
             return response()->json([
+                'success' => false,
+                'error' => 'Error de base de datos. Por favor, verifica los filtros e intenta nuevamente.',
+            ], 500);
+
+        } catch (\Exception $e) {
+            \Log::error('Error in getReport: ' . $e->getMessage(), [
+                'report_code' => $reportCode,
+                'filters' => $request->query(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            
+            return response()->json([
+                'success' => false,
                 'error' => 'Error al generar el reporte: ' . $e->getMessage(),
             ], 500);
         }

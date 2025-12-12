@@ -33,4 +33,14 @@ class Truck extends Model
     {
         return $this->hasMany(GateEvent::class);
     }
+
+    public function digitalPasses()
+    {
+        return $this->hasMany(DigitalPass::class);
+    }
+
+    public function antepuertoQueues()
+    {
+        return $this->hasMany(AntepuertoQueue::class);
+    }
 }
